@@ -34,6 +34,7 @@ header h1{font-size:46px;color:#ffd700}
   border-radius:18px;
   padding:22px;
   transition:.3s;
+  position:relative;
 }
 .card:hover{transform:translateY(-8px)}
 .card img{width:100%;height:130px;object-fit:contain}
@@ -47,9 +48,12 @@ ul{padding-left:18px;color:#aaa}
   border-radius:10px;
   font-weight:700;
   cursor:pointer;
+  text-decoration:none;
 }
 .btn-buy{background:#ffd700;color:#000}
+.btn-buy:disabled{background:#666;cursor:not-allowed;color:#999}
 .btn-info{border:1px solid #333}
+.btn-view-cart{background:#4CAF50;color:white;margin-top:20px}
 .popup, .overlay{
   display:none;
   position:fixed;
@@ -63,16 +67,66 @@ ul{padding-left:18px;color:#aaa}
   padding:25px;
   border-radius:16px;
   max-width:400px;
+  animation:fadeIn 0.3s;
 }
-#cartPopup{
+.cart-notification{
   position:fixed;
-  bottom:30px;
-  right:30px;
-  background:#121826;
-  padding:20px;
-  border-radius:15px;
+  top:20px;
+  right:20px;
+  background:#4CAF50;
+  color:white;
+  padding:15px 20px;
+  border-radius:8px;
   display:none;
   z-index:100;
+  animation:slideIn 0.3s;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+.cart-notification.error{background:#f44336}
+.cart-notification.info{background:#2196F3}
+@keyframes slideIn{
+  from{transform:translateX(100px);opacity:0}
+  to{transform:translateX(0);opacity:1}
+}
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+.badge{
+  position:absolute;
+  top:-8px;
+  right:-8px;
+  background:#f44336;
+  color:white;
+  padding:4px 8px;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:bold;
+}
+.cart-count{
+  display:inline-block;
+  background:#f44336;
+  color:white;
+  padding:2px 8px;
+  border-radius:50%;
+  font-size:12px;
+  margin-left:5px;
+}
+.view-cart-btn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#ffd700;
+  color:#000;
+  padding:12px 20px;
+  border-radius:25px;
+  text-decoration:none;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  z-index:99;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
 }
 </style>
 </head>
@@ -85,7 +139,7 @@ ul{padding-left:18px;color:#aaa}
     <a href="../HTML/Index.html">Home</a>
     <a href="../HTML/Shop.html">Shop</a>
     <a href="../HTML/Rules.html">Rules</a>
-    <a href="../HTML/Cart.html">Cart</a>
+    <a href="../HTML/Cart.html">Cart <span class="cart-count" id="cartCount">0</span></a>
   </div>
 </nav>
 
@@ -98,87 +152,346 @@ ul{padding-left:18px;color:#aaa}
 <div class="cards">
 
 <div class="card">
-<img src="../Images/mvp.webp">
-<h2>💎 MVP</h2>
-<div class="price">₹20</div>
-<ul>
-<li>MVP Kits</li><li>MVP Rank</li><li>Extra Perks</li><li>Boosted Rewards</li>
-</ul>
-<div class="btn btn-buy" onclick="addToCart('mvp')">Add to Cart</div>
-<div class="btn btn-info" onclick="openDetails('mvp')">Details</div>
+  <div class="badge" id="mvpBadge" style="display:none">✓ Added</div>
+  <img src="../Images/mvp.webp">
+  <h2>💎 MVP</h2>
+  <div class="price">₹20</div>
+  <ul>
+    <li>MVP Kits</li><li>MVP Rank</li><li>Extra Perks</li><li>Boosted Rewards</li>
+  </ul>
+  <button class="btn btn-buy" onclick="addToCart('mvp')" id="mvpBtn">Add to Cart</button>
+  <button class="btn btn-info" onclick="openDetails('mvp')">Details</button>
 </div>
 
 <div class="card">
-<img src="../Images/vip.webp">
-<h2>VIP</h2>
-<div class="price">₹50</div>
-<ul>
-<li>VIP Kits</li><li>VIP Rank</li><li>Basic Perks</li><li>Supporter Badge</li>
-</ul>
-<div class="btn btn-buy" onclick="addToCart('vip')">Add to Cart</div>
-<div class="btn btn-info" onclick="openDetails('vip')">Details</div>
+  <div class="badge" id="vipBadge" style="display:none">✓ Added</div>
+  <img src="../Images/vip.webp">
+  <h2>VIP</h2>
+  <div class="price">₹50</div>
+  <ul>
+    <li>VIP Kits</li><li>VIP Rank</li><li>Basic Perks</li><li>Supporter Badge</li>
+  </ul>
+  <button class="btn btn-buy" onclick="addToCart('vip')" id="vipBtn">Add to Cart</button>
+  <button class="btn btn-info" onclick="openDetails('vip')">Details</button>
 </div>
 
 <div class="card">
-<img src="../Images/dominate.webp">
-<h2>🔥 DOMINATE</h2>
-<div class="price">₹70</div>
-<ul>
-<li>OP Kit</li><li>OP Rank</li><li>Bonus Commands</li><li>Extra Loot Boost</li>
-</ul>
-<div class="btn btn-buy" onclick="addToCart('dominate')">Add to Cart</div>
-<div class="btn btn-info" onclick="openDetails('dominate')">Details</div>
+  <div class="badge" id="dominateBadge" style="display:none">✓ Added</div>
+  <img src="../Images/dominate.webp">
+  <h2>🔥 DOMINATE</h2>
+  <div class="price">₹70</div>
+  <ul>
+    <li>OP Kit</li><li>OP Rank</li><li>Bonus Commands</li><li>Extra Loot Boost</li>
+  </ul>
+  <button class="btn btn-buy" onclick="addToCart('dominate')" id="dominateBtn">Add to Cart</button>
+  <button class="btn btn-info" onclick="openDetails('dominate')">Details</button>
 </div>
 
 </div>
+
+<!-- View Cart Button -->
+<a href="../HTML/Cart.html" class="view-cart-btn" id="viewCartBtn" style="display:none">
+  🛒 View Cart (<span id="cartTotalItems">0</span>)
+</a>
+
 </main>
 
 <div class="overlay" id="overlay" onclick="closePopup()"></div>
 
 <div class="popup" id="popup">
-<h2 id="popupTitle"></h2>
-<ul id="popupList"></ul>
-<div class="btn btn-buy" onclick="closePopup()">OK</div>
+  <h2 id="popupTitle"></h2>
+  <ul id="popupList"></ul>
+  <button class="btn btn-buy" onclick="closePopup()">OK</button>
 </div>
 
-<div id="cartPopup">
-<h3>✅ Added to Cart</h3>
-<p>Redirecting…</p>
+<div class="cart-notification" id="cartNotification">
+  <h3>✅ Added to Cart!</h3>
+  <p>Item successfully added to your cart.</p>
+  <button onclick="goToCart()" style="background:#333;color:white;border:none;padding:8px 16px;border-radius:6px;margin-top:10px;cursor:pointer">View Cart</button>
+  <button onclick="hideNotification()" style="background:transparent;color:white;border:1px solid #ddd;padding:8px 16px;border-radius:6px;margin-top:10px;margin-left:10px;cursor:pointer">Continue Shopping</button>
 </div>
 
 <script>
-const products={
- mvp:{name:"MVP",price:20,perks:["MVP Kits","MVP Rank","Extra Perks","Boosted Rewards"]},
- vip:{name:"VIP",price:50,perks:["VIP Kits","VIP Rank","Basic Perks","Supporter Badge"]},
- dominate:{name:"DOMINATE",price:70,perks:["OP Kit","OP Rank","Bonus Commands","Extra Loot Boost"]}
+// Product database (expanded to match your cart.html items)
+const products = {
+  mvp: {
+    name: "MVP", 
+    price: 20, 
+    perks: ["MVP Kits", "MVP Rank", "Extra Perks", "Boosted Rewards"],
+    image: "../Images/mvp.webp",
+    description: "Premium MVP rank with exclusive benefits"
+  },
+  vip: {
+    name: "VIP", 
+    price: 50, 
+    perks: ["VIP Kits", "VIP Rank", "Basic Perks", "Supporter Badge"],
+    image: "../Images/vip.webp",
+    description: "VIP membership with special perks"
+  },
+  dominate: {
+    name: "DOMINATE", 
+    price: 70, 
+    perks: ["OP Kit", "OP Rank", "Bonus Commands", "Extra Loot Boost"],
+    image: "../Images/dominate.webp",
+    description: "Ultimate domination package"
+  },
+  // Additional products from your cart.html
+  bronze: {
+    name: "Bronze VIP",
+    price: 0.99,
+    perks: [
+      "Early access to new minigames",
+      "10% discount on store items",
+      "Access to exclusive kits",
+      "Priority in entry queues",
+      "Exclusive Bronze chat emblem"
+    ],
+    image: "../Images/bronze-rank.webp",
+    description: "Bronze VIP membership"
+  },
+  silver: {
+    name: "Silver VIP",
+    price: 5.99,
+    perks: [
+      "All Bronze VIP advantages",
+      "20% discount on store items",
+      "Access to exclusive kits",
+      "Exclusive minigame access",
+      "Exclusive Silver chat emblem"
+    ],
+    image: "../Images/silver-rank.webp",
+    description: "Silver VIP membership"
+  },
+  gold: {
+    name: "Gold VIP",
+    price: 9.99,
+    perks: [
+      "All Silver VIP advantages",
+      "50% discount on store items",
+      "Daily login rewards",
+      "Exclusive voice channel",
+      "Exclusive Gold chat emblem"
+    ],
+    image: "../Images/gold-rank.webp",
+    description: "Gold VIP membership"
+  },
+  cosmetics: {
+    name: "Cosmetics",
+    price: 2.99,
+    perks: [
+      "Custom special effects",
+      "Custom character appearance",
+      "Custom emotes",
+      "Custom sound effects",
+      "Special particles"
+    ],
+    image: "../Images/cosmetics.webp",
+    description: "Custom cosmetic items"
+  }
 };
 
-function addToCart(id){
- let cart=JSON.parse(localStorage.getItem("cart"))||[];
- if(cart.find(i=>i.id===id)) return alert("Already in cart");
- cart.push({id,...products[id]});
- localStorage.setItem("cart",JSON.stringify(cart));
- document.getElementById("cartPopup").style.display="block";
- setTimeout(()=>location.href="https://zcshop.vercel.app/HTML/Cart.html",3000);
+// Initialize cart from localStorage
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// Update cart count display
+function updateCartDisplay() {
+  const cartCount = cart.length;
+  document.getElementById("cartCount").textContent = cartCount;
+  document.getElementById("cartTotalItems").textContent = cartCount;
+  
+  // Show/hide view cart button
+  const viewCartBtn = document.getElementById("viewCartBtn");
+  if (cartCount > 0) {
+    viewCartBtn.style.display = "flex";
+  } else {
+    viewCartBtn.style.display = "none";
+  }
+  
+  // Update badges for items in cart
+  updateBadges();
 }
 
-function openDetails(id){
- document.getElementById("popupTitle").innerText=products[id].name;
- const ul=document.getElementById("popupList");
- ul.innerHTML="";
- products[id].perks.forEach(p=>{
-  const li=document.createElement("li");
-  li.textContent=p;
-  ul.appendChild(li);
- });
- document.getElementById("overlay").style.display="block";
- document.getElementById("popup").style.display="block";
+// Update badges for items already in cart
+function updateBadges() {
+  const itemsInCart = cart.map(item => item.id);
+  
+  // Update all product badges
+  ['mvp', 'vip', 'dominate', 'bronze', 'silver', 'gold', 'cosmetics'].forEach(id => {
+    const badge = document.getElementById(`${id}Badge`);
+    const btn = document.getElementById(`${id}Btn`);
+    
+    if (badge && btn) {
+      if (itemsInCart.includes(id)) {
+        badge.style.display = 'block';
+        btn.textContent = '✓ Added';
+        btn.disabled = true;
+      } else {
+        badge.style.display = 'none';
+        btn.textContent = 'Add to Cart';
+        btn.disabled = false;
+      }
+    }
+  });
 }
-function closePopup(){
- document.getElementById("overlay").style.display="none";
- document.getElementById("popup").style.display="none";
+
+// Add item to cart
+function addToCart(id) {
+  if (!products[id]) {
+    showNotification("Product not found!", "error");
+    return;
+  }
+  
+  // Check if already in cart
+  if (cart.some(item => item.id === id)) {
+    showNotification("Item is already in your cart!", "info");
+    return;
+  }
+  
+  // Add to cart
+  const product = products[id];
+  cart.push({
+    id: id,
+    name: product.name,
+    price: product.price,
+    image: product.image,
+    perks: product.perks,
+    description: product.description
+  });
+  
+  // Save to localStorage
+  localStorage.setItem("cart", JSON.stringify(cart));
+  
+  // Update UI
+  updateCartDisplay();
+  
+  // Show success notification
+  showNotification(`${product.name} added to cart!`, "success");
+}
+
+// Show notification
+function showNotification(message, type = "success") {
+  const notification = document.getElementById("cartNotification");
+  const title = notification.querySelector("h3");
+  const text = notification.querySelector("p");
+  
+  if (type === "success") {
+    notification.className = "cart-notification";
+    title.innerHTML = "✅ Added to Cart!";
+    text.textContent = message;
+  } else if (type === "error") {
+    notification.className = "cart-notification error";
+    title.innerHTML = "❌ Error!";
+    text.textContent = message;
+  } else if (type === "info") {
+    notification.className = "cart-notification info";
+    title.innerHTML = "ℹ️ Info";
+    text.textContent = message;
+  }
+  
+  notification.style.display = "block";
+  
+  // Auto-hide after 5 seconds
+  setTimeout(() => {
+    notification.style.display = "none";
+  }, 5000);
+}
+
+// Hide notification
+function hideNotification() {
+  document.getElementById("cartNotification").style.display = "none";
+}
+
+// Go to cart page
+function goToCart() {
+  hideNotification();
+  window.location.href = "../HTML/Cart.html";
+}
+
+// Open product details popup
+function openDetails(id) {
+  if (!products[id]) return;
+  
+  const product = products[id];
+  document.getElementById("popupTitle").innerText = product.name + " - ₹" + product.price;
+  const ul = document.getElementById("popupList");
+  ul.innerHTML = "";
+  
+  product.perks.forEach(p => {
+    const li = document.createElement("li");
+    li.textContent = p;
+    ul.appendChild(li);
+  });
+  
+  // Add description if available
+  if (product.description) {
+    const desc = document.createElement("p");
+    desc.textContent = product.description;
+    desc.style.color = "#aaa";
+    desc.style.marginTop = "10px";
+    ul.appendChild(desc);
+  }
+  
+  // Add add-to-cart button in popup
+  const addBtn = document.createElement("button");
+  addBtn.className = "btn btn-buy";
+  addBtn.textContent = cart.some(item => item.id === id) ? "✓ Already in Cart" : "Add to Cart";
+  addBtn.onclick = function() {
+    if (!cart.some(item => item.id === id)) {
+      addToCart(id);
+      closePopup();
+    }
+  };
+  addBtn.style.marginTop = "15px";
+  if (cart.some(item => item.id === id)) {
+    addBtn.disabled = true;
+  }
+  
+  ul.appendChild(addBtn);
+  
+  document.getElementById("overlay").style.display = "block";
+  document.getElementById("popup").style.display = "block";
+}
+
+// Close popup
+function closePopup() {
+  document.getElementById("overlay").style.display = "none";
+  document.getElementById("popup").style.display = "none";
+}
+
+// Initialize on page load
+document.addEventListener("DOMContentLoaded", function() {
+  updateCartDisplay();
+  
+  // Close popup when clicking overlay
+  document.getElementById("overlay").addEventListener("click", closePopup);
+  
+  // Close notification when clicking outside
+  document.addEventListener("click", function(event) {
+    const notification = document.getElementById("cartNotification");
+    if (notification.style.display === "block" && !notification.contains(event.target)) {
+      hideNotification();
+    }
+  });
+  
+  // Add keyboard shortcuts
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+      closePopup();
+      hideNotification();
+    }
+  });
+});
+
+// Clear cart function (for testing)
+function clearCart() {
+  if (confirm("Are you sure you want to clear your cart?")) {
+    localStorage.removeItem("cart");
+    cart = [];
+    updateCartDisplay();
+    showNotification("Cart cleared!", "info");
+  }
 }
 </script>
 
 </body>
-</html>
+  </html>
