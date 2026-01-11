@@ -6,359 +6,179 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="../Images/logo.webp">
 
-<!-- ================== CSS ================== -->
 <style>
-:root{
-  --bg:#0b0e14;
-  --card:#121826;
-  --accent:#ffd700;
-  --text:#e6e6e6;
-  --muted:#9aa4b2;
-  --green:#4caf50;
-  --red:#ff5252;
-  --purple:#9c27b0;
-  --blue:#2196f3;
-}
-
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui}
-
 body{
-  background:radial-gradient(circle at top,#141a2b,#0b0e14 60%);
-  color:var(--text);
+  margin:0;
+  font-family:Inter,system-ui;
+  background:#0b0e14;
+  color:#e6e6e6;
 }
-
-/* ---------- NAV ---------- */
-.nav{
+nav{
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:16px 30px;
-  background:rgba(10,14,24,.9);
-  backdrop-filter:blur(10px);
-  position:sticky;top:0;z-index:100;
+  background:#0f1322;
 }
-
-.nav-logo{display:flex;align-items:center;gap:12px}
-.nav-logo h1{font-size:22px}
-
-.nav a{
-  color:var(--text);
-  text-decoration:none;
-  margin:0 10px;
-  font-weight:500;
-}
-
-.nav-btn{
-  padding:8px 14px;
-  border-radius:10px;
-  background:#1b2238;
-  transition:.3s;
-}
-.nav-btn:hover{background:#27305a}
-
-/* ---------- HEADER ---------- */
-header{
-  text-align:center;
-  padding:70px 20px;
-}
-header h1{
-  font-size:48px;
-  background:linear-gradient(90deg,#ffd700,#ff8c00);
-  -webkit-background-clip:text;
-  color:transparent;
-}
-header span{color:var(--muted);font-size:18px}
-
-/* ---------- CARDS ---------- */
-.container{max-width:1200px;margin:auto;padding:40px 20px}
-
+nav a{color:#fff;text-decoration:none;margin:0 10px}
+header{text-align:center;padding:60px 20px}
+header h1{font-size:46px;color:#ffd700}
+.container{max-width:1200px;margin:auto;padding:20px}
 .cards{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:30px;
+  gap:25px;
 }
-
 .card{
-  background:linear-gradient(180deg,#141a2b,#0f1322);
-  border-radius:20px;
-  padding:25px;
-  position:relative;
-  transition:.4s ease;
-  overflow:hidden;
-}
-
-.card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(120deg,transparent,rgba(255,215,0,.15),transparent);
-  opacity:0;
-  transition:.4s;
-}
-.card:hover::before{opacity:1}
-
-.card:hover{
-  transform:translateY(-12px) scale(1.03);
-  box-shadow:0 25px 60px rgba(0,0,0,.5);
-}
-
-.tag{
-  position:absolute;
-  top:16px;
-  right:16px;
-  font-size:12px;
-  padding:5px 12px;
-  border-radius:999px;
-  font-weight:700;
-}
-.popular{background:var(--green)}
-.best{background:var(--accent);color:#000}
-.custom{background:var(--purple)}
-.start{background:var(--blue)}
-
-.card img{
-  width:100%;
-  max-height:140px;
-  object-fit:contain;
-  margin-bottom:15px;
-}
-
-.card h2{font-size:24px;margin-bottom:5px}
-.price{
-  font-size:26px;
-  font-weight:800;
-  color:var(--accent);
-  margin-bottom:15px;
-}
-
-.card ul{
-  list-style:none;
-  margin-bottom:20px;
-}
-.card ul li{
-  color:var(--muted);
-  margin:6px 0;
-  font-size:14px;
-}
-
-/* ---------- BUTTONS ---------- */
-.btn{
-  display:inline-block;
-  width:100%;
-  text-align:center;
-  padding:12px;
-  border-radius:12px;
-  font-weight:700;
-  margin-top:8px;
-  text-decoration:none;
-  transition:.3s;
-}
-
-.btn-buy{background:var(--accent);color:#000}
-.btn-buy:hover{filter:brightness(.9)}
-
-.btn-info{
-  border:1px solid #2c355f;
-  color:var(--text);
-}
-.btn-info:hover{background:#1c2342}
-
-/* ---------- POPUP ---------- */
-.overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.7);
-  display:none;
-  z-index:200;
-}
-
-.popup{
-  position:fixed;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%) scale(.9);
   background:#121826;
-  padding:30px;
-  border-radius:20px;
-  max-width:420px;
-  width:90%;
-  display:none;
-  z-index:201;
+  border-radius:18px;
+  padding:22px;
   transition:.3s;
 }
-
-.popup.active{display:block;transform:translate(-50%,-50%) scale(1)}
-.overlay.active{display:block}
-
-.popup h2{margin-bottom:10px}
-.popup ul{margin:15px 0}
-.popup button{
-  background:var(--accent);
-  border:none;
-  padding:10px 18px;
+.card:hover{transform:translateY(-8px)}
+.card img{width:100%;height:130px;object-fit:contain}
+.price{font-size:26px;color:#ffd700;font-weight:700}
+ul{padding-left:18px;color:#aaa}
+.btn{
+  display:block;
+  margin-top:10px;
+  padding:12px;
+  text-align:center;
   border-radius:10px;
   font-weight:700;
   cursor:pointer;
 }
-
-/* ---------- FOOTER ---------- */
-footer{
-  text-align:center;
-  padding:40px 20px;
-  color:var(--muted);
-  font-size:14px;
+.btn-buy{background:#ffd700;color:#000}
+.btn-info{border:1px solid #333}
+.popup, .overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+}
+.overlay{background:rgba(0,0,0,.7);z-index:50}
+.popup{
+  z-index:60;
+  margin:auto;
+  background:#121826;
+  padding:25px;
+  border-radius:16px;
+  max-width:400px;
+}
+#cartPopup{
+  position:fixed;
+  bottom:30px;
+  right:30px;
+  background:#121826;
+  padding:20px;
+  border-radius:15px;
+  display:none;
+  z-index:100;
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-logo">
-    <img src="../Images/logo.webp" width="50">
-    <h1>zexoMC</h1>
-  </div>
+<nav>
+  <div><img src="../Images/logo.webp" width="40"> zexoMC</div>
   <div>
     <a href="../HTML/Index.html">Home</a>
     <a href="../HTML/Shop.html">Shop</a>
     <a href="../HTML/Rules.html">Rules</a>
-    <a href="https://discord.com">Discord</a>
+    <a href="../HTML/Cart.html">Cart</a>
   </div>
 </nav>
 
-<!-- HEADER -->
 <header>
   <h1>Server Store</h1>
-  <span>Upgrade your gameplay with exclusive ranks</span>
+  <span>Upgrade your gameplay</span>
 </header>
 
-<!-- SHOP -->
 <main class="container">
 <div class="cards">
 
-<!-- MVP -->
 <div class="card">
-<span class="tag start">Starter</span>
 <img src="../Images/mvp.webp">
 <h2>💎 MVP</h2>
 <div class="price">₹20</div>
 <ul>
-<li>MVP Kits</li>
-<li>MVP Rank</li>
-<li>Extra Perks</li>
-<li>Boosted Rewards</li>
+<li>MVP Kits</li><li>MVP Rank</li><li>Extra Perks</li><li>Boosted Rewards</li>
 </ul>
-<a class="btn btn-buy">Buy Now</a>
-<a class="btn btn-info" onclick="openPopup('mvp')">Details</a>
+<div class="btn btn-buy" onclick="addToCart('mvp')">Add to Cart</div>
+<div class="btn btn-info" onclick="openDetails('mvp')">Details</div>
 </div>
 
-<!-- VIP -->
 <div class="card">
-<span class="tag popular">Popular</span>
 <img src="../Images/vip.webp">
 <h2>VIP</h2>
 <div class="price">₹50</div>
 <ul>
-<li>VIP Kits</li>
-<li>VIP Rank</li>
-<li>Basic Perks</li>
-<li>Supporter Badge</li>
+<li>VIP Kits</li><li>VIP Rank</li><li>Basic Perks</li><li>Supporter Badge</li>
 </ul>
-<a class="btn btn-buy">Buy Now</a>
-<a class="btn btn-info" onclick="openPopup('vip')">Details</a>
+<div class="btn btn-buy" onclick="addToCart('vip')">Add to Cart</div>
+<div class="btn btn-info" onclick="openDetails('vip')">Details</div>
 </div>
 
-<!-- DOMINATE -->
 <div class="card">
-<span class="tag best">BEST</span>
 <img src="../Images/dominate.webp">
 <h2>🔥 DOMINATE</h2>
 <div class="price">₹70</div>
 <ul>
-<li>OP Kit</li>
-<li>OP Rank</li>
-<li>Bonus Commands</li>
-<li>Extra Loot Boost</li>
+<li>OP Kit</li><li>OP Rank</li><li>Bonus Commands</li><li>Extra Loot Boost</li>
 </ul>
-<a class="btn btn-buy">Buy Now</a>
-<a class="btn btn-info" onclick="openPopup('dominate')">Details</a>
-</div>
-
-<!-- ENDER -->
-<div class="card">
-<span class="tag custom">Custom</span>
-<img src="../Images/ender.webp">
-<h2>🐉 ENDER RANK</h2>
-<div class="price">Custom</div>
-<ul>
-<li>Void Kit</li>
-<li>Discord + MC Rank</li>
-<li>Premium Commands</li>
-<li>Dragon Effects</li>
-</ul>
-<a class="btn btn-buy" href="https://discord.com">Contact Admin</a>
-<a class="btn btn-info" onclick="openPopup('ender')">Details</a>
-</div>
-
-<!-- CUSTOM -->
-<div class="card">
-<span class="tag custom">Ultra</span>
-<img src="../Images/custom.webp">
-<h2>✨ CUSTOM RANK</h2>
-<div class="price">Depends</div>
-<ul>
-<li>Custom Name</li>
-<li>Custom Color</li>
-<li>Special Perks</li>
-</ul>
-<a class="btn btn-buy" href="https://discord.com">Create Rank</a>
-<a class="btn btn-info" onclick="openPopup('custom')">Details</a>
+<div class="btn btn-buy" onclick="addToCart('dominate')">Add to Cart</div>
+<div class="btn btn-info" onclick="openDetails('dominate')">Details</div>
 </div>
 
 </div>
 </main>
 
-<!-- POPUP -->
 <div class="overlay" id="overlay" onclick="closePopup()"></div>
 
 <div class="popup" id="popup">
 <h2 id="popupTitle"></h2>
 <ul id="popupList"></ul>
-<button onclick="closePopup()">OK</button>
+<div class="btn btn-buy" onclick="closePopup()">OK</div>
 </div>
 
-<!-- FOOTER -->
-<footer>
-© 2026 zexoMC • Not affiliated with Mojang
-</footer>
+<div id="cartPopup">
+<h3>✅ Added to Cart</h3>
+<p>Redirecting…</p>
+</div>
 
-<!-- ================== JS ================== -->
 <script>
-const data={
- mvp:["MVP Kits","MVP Rank","Extra Perks","Boosted Rewards"],
- vip:["VIP Kits","VIP Rank","Basic Perks","Supporter Badge"],
- dominate:["OP Kit","OP Rank","Bonus Commands","Extra Loot Boost"],
- ender:["Void Kit","Discord & MC Rank","Premium Commands","Dragon Effects"],
- custom:["Custom Name","Custom Color","Special Perks"]
+const products={
+ mvp:{name:"MVP",price:20,perks:["MVP Kits","MVP Rank","Extra Perks","Boosted Rewards"]},
+ vip:{name:"VIP",price:50,perks:["VIP Kits","VIP Rank","Basic Perks","Supporter Badge"]},
+ dominate:{name:"DOMINATE",price:70,perks:["OP Kit","OP Rank","Bonus Commands","Extra Loot Boost"]}
 };
 
-function openPopup(type){
- document.getElementById("popupTitle").innerText=type.toUpperCase();
- const ul=document.getElementById("popupList");
- ul.innerHTML="";
- data[type].forEach(i=>{
-  const li=document.createElement("li");
-  li.textContent=i;
-  ul.appendChild(li);
- });
- document.getElementById("overlay").classList.add("active");
- document.getElementById("popup").classList.add("active");
+function addToCart(id){
+ let cart=JSON.parse(localStorage.getItem("cart"))||[];
+ if(cart.find(i=>i.id===id)) return alert("Already in cart");
+ cart.push({id,...products[id]});
+ localStorage.setItem("cart",JSON.stringify(cart));
+ document.getElementById("cartPopup").style.display="block";
+ setTimeout(()=>location.href="https://zcshop.vercel.app/HTML/Cart.html",3000);
 }
 
+function openDetails(id){
+ document.getElementById("popupTitle").innerText=products[id].name;
+ const ul=document.getElementById("popupList");
+ ul.innerHTML="";
+ products[id].perks.forEach(p=>{
+  const li=document.createElement("li");
+  li.textContent=p;
+  ul.appendChild(li);
+ });
+ document.getElementById("overlay").style.display="block";
+ document.getElementById("popup").style.display="block";
+}
 function closePopup(){
- document.getElementById("overlay").classList.remove("active");
- document.getElementById("popup").classList.remove("active");
+ document.getElementById("overlay").style.display="none";
+ document.getElementById("popup").style.display="none";
 }
 </script>
 
 </body>
-    </html>
+</html>
